@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="referrer" content="no-referrer">
+  <title>Two-Factor Authentication — SecureCorp</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+
+  <main class="login-wrap">
+    <div class="login-card" role="main">
+
+      <div class="brand">
+        <div class="brand-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <rect width="28" height="28" rx="8" fill="currentColor" opacity="0.12"/>
+            <path d="M8 14L12 18L20 10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="brand-name">SecureCorp</span>
+      </div>
+
+      <div class="card-header">
+        <div class="mfa-shield" aria-hidden="true">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="currentColor" opacity="0.15"/>
+            <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h1>Two-factor auth</h1>
+        <p>Enter the 6-digit code from your authenticator app</p>
+      </div>
+
+      <div id="alert-box" class="alert" role="alert" aria-live="polite" aria-atomic="true" hidden></div>
+
+      <form id="mfa-form" novalidate>
+        <input type="hidden" id="csrf-token" name="_csrf" value="">
+
+        <div class="otp-group" role="group" aria-label="One-time password input">
+          <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input" aria-label="Digit 1" autocomplete="one-time-code">
+          <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input" aria-label="Digit 2">
+          <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input" aria-label="Digit 3">
+          <div class="otp-sep" aria-hidden="true">—</div>
+          <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input" aria-label="Digit 4">
+          <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input" aria-label="Digit 5">
+          <input type="text" inputmode="numeric" pattern="[0-9]" maxlength="1" class="otp-input" aria-label="Digit 6">
+        </div>
+
+        <div class="timer-row">
+          <span class="timer-label">Code expires in</span>
+          <span id="countdown" class="timer-count">30s</span>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submit-btn" disabled>
+          <span class="btn-text">Verify code</span>
+          <span class="btn-spinner" aria-hidden="true" hidden>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2.5" stroke-dasharray="31.4" stroke-dashoffset="10" stroke-linecap="round"/>
+            </svg>
+          </span>
+        </button>
+      </form>
+
+      <div class="mfa-options">
+        <button type="button" class="text-btn" onclick="showBackupCode()">Use a backup code instead</button>
+        <span class="dot-sep" aria-hidden="true">·</span>
+        <button type="button" class="text-btn" onclick="requestSMS()">Send code via SMS</button>
+      </div>
+
+      <!-- Backup code panel (hidden by default) -->
+      <div id="backup-panel" class="backup-panel" hidden>
+        <label for="backup-code">Backup code</label>
+        <input type="text" id="backup-code" placeholder="XXXX-XXXX-XXXX" autocomplete="off" maxlength="19" aria-describedby="backup-hint">
+        <span id="backup-hint" class="field-hint">Enter one of your 8 single-use backup codes</span>
+        <button type="button" class="submit-btn" onclick="verifyBackup()" style="margin-top:12px">Use backup code</button>
+      </div>
+
+      <a href="../index.html" class="back-link">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" fill="currentColor"/>
+        </svg>
+        Back to login
+      </a>
+
+      <div class="security-badge">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z" fill="currentColor"/>
+        </svg>
+        Protected by 256-bit TLS encryption
+      </div>
+    </div>
+  </main>
+
+  <script src="../js/mfa.js"></script>
+</body>
+</html>
